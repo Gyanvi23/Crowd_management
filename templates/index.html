@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CrowdSense AI</title>
+
+<link rel="stylesheet" href="/static/styles.css">
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <button id="cameraBtn">
+            📷 Live Camera
+        </button>
+
+        <label class="upload-btn">
+
+            🖼 Upload Image
+
+            <input
+            type="file"
+            id="imageUpload"
+            accept="image/*"
+            hidden>
+
+        </label>
+
+        <label class="upload-btn">
+
+            🎥 Upload Video
+
+            <input
+            type="file"
+            id="videoUpload"
+            accept="video/*"
+            hidden>
+
+        </label>
+
+        <button id="analyticsBtn">
+            📊 Analytics
+        </button>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <header>
+
+            <h1>
+                AI Crowd Monitoring Dashboard
+            </h1>
+
+        </header>
+
+        <div class="dashboard">
+
+            <!-- LEFT SIDE -->
+
+            <div class="camera-card">
+
+                
+                <div class="video-wrapper">
+
+                    <video
+                    id="video"
+                    autoplay
+                    muted
+                    playsinline>
+                    </video>
+
+                    <img id="uploadedImage">
+
+                    <canvas id="overlay"></canvas>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="analytics">
+
+                <div class="card">
+
+                    <h2>
+                        📈 Crowd Analytics
+                    </h2>
+
+                    <canvas id="crowdChart"></canvas>
+
+                </div>
+
+                <div class="card">
+
+                    <h2>
+                        👥 Crowd Count
+                    </h2>
+
+                    <p id="count">0</p>
+
+                </div>
+
+                <div class="card">
+
+                    <h2>
+                        🚨 Density
+                    </h2>
+
+                    <p id="density">
+                        Low
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="/static/script.js"></script>
+
+</body>
