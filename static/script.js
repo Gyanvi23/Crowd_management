@@ -1,17 +1,21 @@
 let crowdData = [];
-
+let peakCount = 0;
+let currentMode = "";
 let labels = [];
 let chart;
+let lastTime =
+performance.now();
 
 
-const video = document.getElementById("video");
+let video;
 
-const canvas = document.getElementById("overlay");
+let canvas;
 
-const ctx = canvas.getContext("2d");
+let ctx;
 
 async function startCamera(){
     console.log("CAMERA STARTED");
+    currentMode = "camera";
     const stream =
     await navigator.mediaDevices.getUserMedia({
         video:true
@@ -30,6 +34,10 @@ async function startCamera(){
 }
 
 async function detectFrame(){
+    
+    if(currentMode !== "camera"){
+    return;
+}
     
     console.log("DETECT FRAME RUNNING");
     const tempCanvas =
@@ -71,6 +79,9 @@ async function detectFrame(){
     requestAnimationFrame(detectFrame);
 }
 async function detectUploadedVideo(){
+    if(currentMode !== "video"){
+    return;
+}
 
     if(
         video.paused ||
@@ -146,6 +157,7 @@ function drawBoxes(detections){
         canvas.width,
         canvas.height
     );
+    let totalArea = 0;
 
     detections.forEach(box => {
 
@@ -205,6 +217,13 @@ function drawBoxes(detections){
         ctx.shadowBlur = 20;
 
         ctx.lineWidth = 3;
+        const area =
+
+        (box.x2 - box.x1) *
+
+        (box.y2 - box.y1);
+
+        totalArea += area;
 
         ctx.strokeRect(
             box.x1,
@@ -226,10 +245,134 @@ function drawBoxes(detections){
             box.x1,
             box.y1 - 10
         );
-    });
+   });
+
+updateDensityByArea(
+    totalArea,
+    detections.length
+);
+
+}
+function updateDensityByArea(
+    totalArea,
+    peopleCount
+){
+
+    const frameArea =
+
+    canvas.width *
+
+    canvas.height;
+
+    let occupancy =
+
+(totalArea / frameArea) * 100;
+
+// LIMIT MAX VALUE
+
+occupancy = Math.min(
+    occupancy,
+    100
+);
+
+console.log(
+    "Occupancy =",
+    occupancy
+);
+
+    const densityText =
+    document.getElementById(
+        "density"
+    );
+    document
+.getElementById(
+    "occupancy"
+)
+.innerText =
+
+occupancy.toFixed(1)
++ "%";
+    const alertBox =
+    document.getElementById(
+        "alertBox"
+    );
+
+    // SMART AI LOGIC
+
+    if(
+    occupancy < 12 &&
+    peopleCount < 10
+){
+
+    densityText.innerText =
+    "Low";
+
+    alertBox.innerText =
+    "✅ AREA SAFE";
+
+    alertBox.style.background =
+    "#16a34a";
+    alertBox.classList.remove(
+    "danger"
+);
+    
+}
+
+else if(
+    occupancy < 28
+){
+
+    densityText.innerText =
+    "Medium";
+
+    alertBox.innerText =
+    "⚠ CROWD BUILDING";
+
+    alertBox.style.background =
+    "#f59e0b";
+    alertBox.classList.remove(
+    "danger"
+);
+}
+
+else{
+
+    densityText.innerText =
+    "High";
+
+    alertBox.innerText =
+    "🚨 DANGEROUS CROWD";
+
+    alertBox.style.background =
+    "#dc2626";
+    alertBox.classList.add(
+    "danger"
+);
+}
+    // SHOW OCCUPANCY %
+
+    document
+    .getElementById(
+        "occupancy"
+    )
+    .innerText =
+
+    occupancy.toFixed(1)
+    + "%";
 }
 
 function updateAnalytics(count){
+    console.log("COUNT =", count);
+    if(count > peakCount){
+
+    peakCount = count;
+
+    document
+    .getElementById(
+        "peakCount"
+    )
+    .innerText = peakCount;
+}
 
     document.getElementById("count")
     .innerText = count;
@@ -246,7 +389,51 @@ function updateAnalytics(count){
 
     document.getElementById("density")
     .innerText = density;
-    labels.push("");
+
+const alertBox =
+document.getElementById(
+    "alertBox"
+);
+
+if(alertBox){
+
+    if(count <=1){
+
+    alertBox.innerText =
+    "✅ AREA CLEAR";
+
+    alertBox.style.background =
+    "#16a34a";
+    alertBox.classList.remove(
+    "danger"
+);
+}
+
+else if(count <= 3){
+
+    alertBox.innerText =
+    "⚠ CROWD FORMING";
+
+    alertBox.style.background =
+    "#f59e0b";
+    alertBox.classList.remove(
+    "danger"
+);
+}
+
+else{
+
+    alertBox.innerText =
+    "🚨 HIGH CROWD DETECTED";
+
+    alertBox.style.background =
+    "#dc2626";
+    alertBox.classList.add(
+    "danger"
+);
+}
+}
+labels.push("");
 
 crowdData.push(count);
 
@@ -257,9 +444,78 @@ if(labels.length > 15){
     crowdData.shift();
 }
 
-chart.update();
+if(chart){
+
+    chart.update();
+}
 }
 window.onload = function(){
+    document
+document
+.getElementById(
+    "analyticsBtn"
+)
+.addEventListener(
+
+    "click",
+
+    function(){
+
+        const analytics =
+
+        document.getElementById(
+            "analyticsSection"
+        );
+
+        // GLOW EFFECT
+
+        analytics.classList.add(
+            "active"
+        );
+
+        // BUTTON PRESS
+
+        document
+        .getElementById(
+            "analyticsBtn"
+        )
+        .style.transform =
+        "scale(0.92)";
+
+        // REMOVE EFFECTS
+
+        setTimeout(()=>{
+
+            analytics.classList.remove(
+                "active"
+            );
+
+        },1500);
+
+        setTimeout(()=>{
+
+            document
+            .getElementById(
+                "analyticsBtn"
+            )
+            .style.transform =
+            "scale(1)";
+
+        },200);
+    }
+);
+    video =
+document.getElementById(
+    "video"
+);
+
+canvas =
+document.getElementById(
+    "overlay"
+);
+
+ctx =
+canvas.getContext("2d");
 
     // GRAPH
 
@@ -334,7 +590,7 @@ async function(e){
     new FileReader();
 
     reader.onload = async function(){
-
+    currentMode = "image";
     const uploadedImage =
     document.getElementById(
         "uploadedImage"
@@ -423,9 +679,9 @@ document
 
 "click",
 
-async function(){
+function(){
 
-    // SHOW VIDEO
+    // SHOW CAMERA
 
     video.style.display =
     "block";
@@ -433,23 +689,12 @@ async function(){
     // HIDE IMAGE
 
     document
-    .getElementById(
-        "uploadedImage"
-    )
+    .getElementById("uploadedImage")
     .style.display = "none";
-
-    // CLEAR CANVAS
-
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
 
     // START CAMERA
 
-    await startCamera();
+    startCamera();
 });
 document
 .getElementById("videoUpload")
@@ -483,7 +728,7 @@ function(e){
     video.srcObject = null;
 
     video.src = videoURL;
-
+    currentMode = "video";
     video.onloadedmetadata = async () => {
 
     await video.play();

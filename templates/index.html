@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <div id="particles"></div>
 
     <!-- SIDEBAR -->
 
@@ -55,6 +56,15 @@
     <!-- MAIN -->
 
     <div class="main">
+        <div id="alertBox">
+        <div id="fpsCounter">
+
+            FPS: 0
+
+        </div>
+        🚨 CROWD LEVEL NORMAL
+
+        </div>
 
         <header>
 
@@ -72,7 +82,7 @@
 
                 
                 <div class="video-wrapper">
-
+                    <div class="scanner-line"></div>
                     <video
                     id="video"
                     autoplay
@@ -90,7 +100,9 @@
 
             <!-- RIGHT SIDE -->
 
-            <div class="analytics">
+            <div
+            class="analytics"
+            id="analyticsSection">
 
                 <div class="card">
 
@@ -111,7 +123,17 @@
                     <p id="count">0</p>
 
                 </div>
+                <div class="card">
 
+                    <h2>
+                        🏢 Occupancy
+                    </h2>
+
+                    <p id="occupancy">
+                        0%
+                    </p>
+
+                </div>
                 <div class="card">
 
                     <h2>
@@ -123,6 +145,18 @@
                     </p>
 
                 </div>
+                <div class="card">
+
+                    <h2>
+                         🚀 Peak Crowd
+                    </h2>
+
+                    <p id="peakCount">
+                         0
+                    </p>
+
+                </div>
+
 
             </div>
 
@@ -133,5 +167,38 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="/static/script.js"></script>
+    
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<script>
+
+tsParticles.load("particles",{
+
+    particles:{
+
+        number:{
+            value:80
+        },
+
+        color:{
+            value:"#00ffff"
+        },
+
+        links:{
+            enable:true,
+            color:"#00ffff"
+        },
+
+        move:{
+            enable:true,
+            speed:1
+        },
+
+        size:{
+            value:2
+        }
+    }
+});
+
+</script>
 
 </body>

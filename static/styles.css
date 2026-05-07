@@ -13,15 +13,36 @@ body{
 }
 
 .sidebar{
-
+    position:relative;
+    z-index:1;
     width:250px;
+
     height:100vh;
 
-    background:rgba(255,255,255,0.05);
+    background:rgba(
+        255,
+        255,
+        255,
+        0.08
+    );
 
-    backdrop-filter:blur(10px);
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(
+        255,
+        255,
+        255,
+        0.1
+    );
 
     padding:20px;
+    box-shadow:
+0 0 20px rgba(
+    0,
+    255,
+    255,
+    0.08
+);
 }
 
 .sidebar h2{
@@ -56,6 +77,8 @@ body{
 .main{
     flex:1;
     padding:20px;
+    position:relative;
+    z-index:1;
 }
 
 header{
@@ -82,31 +105,69 @@ header{
 
     flex:2;
 
-    background:rgba(255,255,255,0.05);
+    background:rgba(
+        255,
+        255,
+        255,
+        0.08
+    );
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(
+        255,
+        255,
+        255,
+        0.1
+    );
 
     padding:20px;
 
     border-radius:20px;
+    box-shadow:
+0 0 20px rgba(
+    0,
+    255,
+    255,
+    0.08
+);
 }
 
 .analytics{
     flex:1;
 }
 
+
 .card{
 
-    background:rgba(255,255,255,0.05);
+    background:rgba(
+        255,
+        255,
+        255,
+        0.08
+    );
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(
+        255,
+        255,
+        255,
+        0.1
+    );
 
     padding:20px;
 
     border-radius:20px;
 
     margin-bottom:20px;
-}
-
-.card p{
-    font-size:40px;
-    margin-top:10px;
+    box-shadow:
+0 0 20px rgba(
+    0,
+    255,
+    255,
+    0.08
+);
 }
 
 .video-wrapper{
@@ -115,7 +176,7 @@ header{
 }
 
 .video-wrapper{
-
+    overflow:hidden;
     position:relative;
 
     width:100%;
@@ -255,9 +316,182 @@ input[type="file"]{
     width:100%;
 
     height:100%;
+
+    z-index:5;
+
+    pointer-events:none;
 }
 .sidebar button:active,
 .upload-btn:active{
 
     transform:scale(0.97);
+}
+#alertBox{
+
+    position:fixed;
+
+    top:20px;
+
+    right:20px;
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:15px 25px;
+
+    border-radius:15px;
+
+    font-weight:bold;
+
+    font-size:16px;
+
+    z-index:99999;
+
+    box-shadow:
+    0 0 20px rgba(
+        0,
+        255,
+        0,
+        0.5
+    );
+
+    transition:0.4s;
+   
+}
+#particles{
+
+    position:fixed;
+
+    width:100%;
+
+    height:100%;
+
+    top:0;
+
+    left:0;
+
+    z-index:0;
+}
+.scanner-line{
+    pointer-events:none;
+    position:absolute;
+
+    width:100%;
+
+    height:4px;
+
+    background:cyan;
+
+    top:0;
+
+    left:0;
+
+    box-shadow:
+    0 0 20px cyan;
+
+    animation:
+    scan 3s linear infinite;
+
+    z-index:2;
+}
+
+@keyframes scan{
+
+    0%{
+        top:0;
+    }
+
+    100%{
+        top:100%;
+    }
+}
+.danger{
+
+    animation:
+    dangerPulse 1s infinite;
+}
+
+@keyframes dangerPulse{
+
+    0%{
+
+        box-shadow:
+        0 0 10px red;
+    }
+
+    50%{
+
+        box-shadow:
+        0 0 40px red;
+    }
+
+    100%{
+
+        box-shadow:
+        0 0 10px red;
+    }
+}
+#fpsCounter{
+
+    position:fixed;
+
+    top:90px;
+
+    right:20px;
+
+    background:#0f172a;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    border:1px solid cyan;
+
+    z-index:99999;
+}
+@media(max-width:900px){
+
+    body{
+
+        flex-direction:column;
+    }
+
+    .sidebar{
+        position:relative;
+        z-index:1;
+
+        width:100%;
+
+        height:auto;
+
+        display:flex;
+
+        gap:10px;
+
+        overflow-x:auto;
+    }
+
+    .dashboard{
+
+        flex-direction:column;
+    }
+
+    .analytics{
+
+        width:100%;
+    }
+}
+.analytics.active{
+
+    transform:
+    scale(1.05)
+    rotate(1deg);
+
+    box-shadow:
+    0 0 120px cyan;
+
+    border:3px solid cyan;
+
+    transition:0.4s;
 }

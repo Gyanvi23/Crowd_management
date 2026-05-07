@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from matplotlib.pyplot import box
 from ultralytics import YOLO
 import cv2
 import numpy as np
@@ -7,7 +8,7 @@ import base64
 
 app = Flask(__name__)
 
-model = YOLO("yolov8n.pt")
+model = YOLO("yolov8m.pt")
 print("YOLO RUNNING")
 
 @app.route('/')
@@ -40,7 +41,10 @@ def detect():
 
             cls = int(box.cls[0])
 
-            if cls == 0:
+            conf = float(box.conf[0])
+            
+
+            if cls == 0 and conf > 0.3:
                 print("PERSON DETECTED")
 
                 count += 1
